@@ -1,0 +1,124 @@
+[hadoop@client36 Shreyas]$ cd $HADOOP_HOME/sbin/
+
+[hadoop@client36 sbin]$ ./start-dfs.sh
+Starting namenodes on [client36.hadoop.lan]
+client36.hadoop.lan: namenode running as process 6237. Stop it first.
+localhost: starting datanode, logging to /opt/hadoop/logs/hadoop-hadoop-datanode-client36.out
+Starting secondary namenodes [0.0.0.0]
+0.0.0.0: starting secondarynamenode, logging to /opt/hadoop/logs/hadoop-hadoop-secondarynamenode-client36.out
+
+[hadoop@client36 sbin]$ ./start-yarn.sh
+starting yarn daemons
+starting resourcemanager, logging to /opt/hadoop/logs/yarn-hadoop-resourcemanager-client36.out
+localhost: starting nodemanager, logging to /opt/hadoop/logs/yarn-hadoop-nodemanager-client36.out
+
+1. version
+
+[hadoop@client36 Shreyas]$ hadoop version 
+Hadoop 2.10.1
+Subversion https://github.com/apache/hadoop -r 1827467c9a56f133025f28557bfc2c562d78e816
+Compiled by centos on 2020-09-14T13:17Z
+Compiled with protoc 2.5.0
+From source with checksum 3114edef868f1f3824e7d0f68be03650
+This command was run using /opt/hadoop/share/hadoop/common/hadoop-common-2.10.1.jar
+
+2. mkdir
+
+[hadoop@client36 Shreyas]$ hadoop fs -mkdir /test
+
+3. ls
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /
+Found 12 items
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:15 /AA
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:02 /AD
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 13:59 /AbhiDahi
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:24 /CC
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:13 /Disha
+-rw-r--r--   3 hadoop supergroup      15841 2022-11-19 14:44 /Hadoop_File
+-rw-r--r--   3 hadoop supergroup          7 2022-11-19 14:35 /Hadoop_File1
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:08 /Sakshi
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:34 /Tejashree
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:34 /Tejashree1
+-rw-r--r--   3 hadoop supergroup          7 2022-11-19 14:48 /ha
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:35 /test
+
+4. put
+
+[hadoop@client36 Shreyas]$ ls -l
+total 12
+-rw-rw-r--. 1 hadoop hadoop 2257 Nov 24 14:40 a1.txt
+-rw-rw-r--. 1 hadoop hadoop   13 Nov 24 14:38 hello.txt
+
+[hadoop@client36 Shreyas]$ hadoop fs -put hello.txt /test/
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /test
+
+Found 1 items
+-rw-r--r--   3 hadoop supergroup         13 2022-11-24 14:38 /test/hello.txt
+
+5. copyFromLocal
+
+[hadoop@client36 Shreyas]$ ls -l
+total 12
+-rw-rw-r--. 1 hadoop hadoop 2257 Nov 24 14:40 a1.txt
+-rw-rw-r--. 1 hadoop hadoop   13 Nov 24 14:38 hello.txt
+-rw-rw-r--. 1 hadoop hadoop   10 Nov 24 14:41 test.txt
+
+[hadoop@client36 Shreyas]$ hadoop fs -copyFromLocal ~/Desktop/Shreyas/test.txt /test/tst.txt
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /test
+Found 2 items
+-rw-r--r--   3 hadoop supergroup         13 2022-11-24 14:38 /test/hello.txt
+-rw-r--r--   3 hadoop supergroup         10 2022-11-24 14:42 /test/tst.txt
+
+6. get
+
+[hadoop@client36 Shreyas]$ hadoop fs -get /test/tst.txt ~/Desktop/Shreyas/tst.txt
+[hadoop@client36 Shreyas]$ ls -l
+total 16
+-rw-rw-r--. 1 hadoop hadoop 2924 Nov 24 14:43 a1.txt
+-rw-rw-r--. 1 hadoop hadoop   13 Nov 24 14:38 hello.txt
+-rw-rw-r--. 1 hadoop hadoop   10 Nov 24 14:41 test.txt
+-rw-r--r--. 1 hadoop hadoop   10 Nov 24 14:44 tst.txt
+
+7. copyToLocal
+
+[hadoop@client36 Shreyas]$ hadoop fs -copyToLocal /test/hello.txt ~/Desktop/Shreyas/h.txt
+
+[hadoop@client36 Shreyas]$ ls -l
+total 20
+-rw-rw-r--. 1 hadoop hadoop 3291 Nov 24 14:44 a1.txt
+-rw-rw-r--. 1 hadoop hadoop   13 Nov 24 14:38 hello.txt
+-rw-r--r--. 1 hadoop hadoop   13 Nov 24 14:46 h.txt
+-rw-rw-r--. 1 hadoop hadoop   10 Nov 24 14:41 test.txt
+-rw-r--r--. 1 hadoop hadoop   10 Nov 24 14:44 tst.txt
+
+8. cat
+
+[hadoop@client36 Shreyas]$ hadoop fs -cat /test/hello.txt 
+Hello World!
+
+9. mv
+
+[hadoop@client36 Shreyas]$ hadoop fs -mv /test/tst.txt /test/a2.txt
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /test
+Found 2 items
+-rw-r--r--   3 hadoop supergroup         10 2022-11-24 14:42 /test/a2.txt
+-rw-r--r--   3 hadoop supergroup         13 2022-11-24 14:38 /test/hello.txt
+
+10. cp
+
+[hadoop@client36 Shreyas]$ hadoop fs -cp /test/a2.txt /test/a3.txt
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /test
+Found 3 items
+-rw-r--r--   3 hadoop supergroup         10 2022-11-24 14:42 /test/a2.txt
+-rw-r--r--   3 hadoop supergroup         10 2022-11-24 15:21 /test/a3.txt
+-rw-r--r--   3 hadoop supergroup         13 2022-11-24 14:38 /test/hello.txt
+
+
+
+
+

@@ -1,0 +1,217 @@
+[hadoop@client36 Shreyas]$ cd $HADOOP_HOME/sbin/
+
+[hadoop@client36 sbin]$ ./start-dfs.sh
+Starting namenodes on [client36.hadoop.lan]
+client36.hadoop.lan: namenode running as process 6237. Stop it first.
+localhost: starting datanode, logging to /opt/hadoop/logs/hadoop-hadoop-datanode-client36.out
+Starting secondary namenodes [0.0.0.0]
+0.0.0.0: starting secondarynamenode, logging to /opt/hadoop/logs/hadoop-hadoop-secondarynamenode-client36.out
+
+[hadoop@client36 sbin]$ ./start-yarn.sh
+starting yarn daemons
+starting resourcemanager, logging to /opt/hadoop/logs/yarn-hadoop-resourcemanager-client36.out
+localhost: starting nodemanager, logging to /opt/hadoop/logs/yarn-hadoop-nodemanager-client36.out
+
+
+1. moveFromLocal
+
+[hadoop@client36 Shreyas]$ ls -l
+total 28
+-rw-rw-r--. 1 hadoop hadoop 4428 Nov 24 15:24 a1.txt
+-rw-rw-r--. 1 hadoop hadoop  703 Nov 24 15:26 a2.txt
+-rw-rw-r--. 1 hadoop hadoop   13 Nov 24 14:38 hello.txt
+-rw-r--r--. 1 hadoop hadoop    6 Nov 24 15:25 h.txt
+-rw-rw-r--. 1 hadoop hadoop   10 Nov 24 14:41 test.txt
+-rw-r--r--. 1 hadoop hadoop   10 Nov 24 14:44 tst.txt
+
+[hadoop@client36 Shreyas]$ hadoop fs -moveFromLocal ~/Desktop/Shreyas/h.txt /test/
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /test
+Found 4 items
+-rw-r--r--   3 hadoop supergroup         10 2022-11-24 14:42 /test/a2.txt
+-rw-r--r--   3 hadoop supergroup         10 2022-11-24 15:21 /test/a3.txt
+-rw-r--r--   3 hadoop supergroup          6 2022-11-24 15:30 /test/h.txt
+-rw-r--r--   3 hadoop supergroup         13 2022-11-24 14:38 /test/hello.txt
+
+2. moveToLocal
+
+[hadoop@client36 Shreyas]$ hadoop fs -moveToLocal /test/h.txt ~/Desktop/Shreyas/atest.txt
+moveToLocal: Option '-moveToLocal' is not implemented yet.
+
+3. tail
+
+
+[hadoop@client36 Shreyas]$ hadoop fs -tail -f /test/h.txt
+Hieee
+.
+.
+.
+
+4. rm
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /test
+Found 4 items
+-rw-r--r--   3 hadoop supergroup         10 2022-11-24 14:42 /test/a2.txt
+-rw-r--r--   3 hadoop supergroup         10 2022-11-24 15:21 /test/a3.txt
+-rw-r--r--   3 hadoop supergroup          6 2022-11-24 15:30 /test/h.txt
+-rw-r--r--   3 hadoop supergroup         13 2022-11-24 14:38 /test/hello.txt
+
+[hadoop@client36 Shreyas]$ hadoop fs -rm /test/h.txt
+Deleted /test/h.txt
+
+5. expunge
+
+[hadoop@client36 Shreyas]$ hadoop fs -expunge
+
+6. chown
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /
+Found 12 items
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:15 /AA
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:02 /AD
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 13:59 /AbhiDahi
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:24 /CC
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:13 /Disha
+-rw-r--r--   3 hadoop supergroup      15841 2022-11-19 14:44 /Hadoop_File
+-rw-r--r--   3 hadoop supergroup          7 2022-11-19 14:35 /Hadoop_File1
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:08 /Sakshi
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:34 /Tejashree
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:34 /Tejashree1
+-rw-r--r--   3 hadoop supergroup          7 2022-11-19 14:48 /ha
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 15:43 /test
+
+[hadoop@client36 Shreyas]$ hadoop fs -chown sdf /test/
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /
+Found 12 items
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:15 /AA
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:02 /AD
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 13:59 /AbhiDahi
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:24 /CC
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:13 /Disha
+-rw-r--r--   3 hadoop supergroup      15841 2022-11-19 14:44 /Hadoop_File
+-rw-r--r--   3 hadoop supergroup          7 2022-11-19 14:35 /Hadoop_File1
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:08 /Sakshi
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:34 /Tejashree
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:34 /Tejashree1
+-rw-r--r--   3 hadoop supergroup          7 2022-11-19 14:48 /ha
+drwxr-xr-x   - sdf    supergroup          0 2022-11-24 15:43 /test
+
+7. chgrp
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /
+Found 12 items
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:15 /AA
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:02 /AD
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 13:59 /AbhiDahi
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:24 /CC
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:13 /Disha
+-rw-r--r--   3 hadoop supergroup      15841 2022-11-19 14:44 /Hadoop_File
+-rw-r--r--   3 hadoop supergroup          7 2022-11-19 14:35 /Hadoop_File1
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:08 /Sakshi
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:34 /Tejashree
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:34 /Tejashree1
+-rw-r--r--   3 hadoop supergroup          7 2022-11-19 14:48 /ha
+drwxr-xr-x   - sdf    supergroup          0 2022-11-24 15:43 /test
+
+[hadoop@client36 Shreyas]$ hadoop fs -chgrp hello /test
+
+[hadoop@client36 Shreyas]$ hadoop fs -ls /
+Found 12 items
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:15 /AA
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:02 /AD
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 13:59 /AbhiDahi
+drwxr-xr-x   - hadoop supergroup          0 2022-11-24 14:24 /CC
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:13 /Disha
+-rw-r--r--   3 hadoop supergroup      15841 2022-11-19 14:44 /Hadoop_File
+-rw-r--r--   3 hadoop supergroup          7 2022-11-19 14:35 /Hadoop_File1
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:08 /Sakshi
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:34 /Tejashree
+drwxr-xr-x   - hadoop supergroup          0 2022-11-19 15:34 /Tejashree1
+-rw-r--r--   3 hadoop supergroup          7 2022-11-19 14:48 /ha
+drwxr-xr-x   - sdf    hello               0 2022-11-24 15:43 /test
+
+8. setrep
+
+[hadoop@client36 Shreyas]$ hadoop fs -setrep 5 /test
+Replication 5 set: /test/a2.txt
+Replication 5 set: /test/a3.txt
+Replication 5 set: /test/hello.txt
+
+9. du
+
+[hadoop@client36 Shreyas]$ hadoop fs -du /
+0      /AA
+0      /AD
+13     /AbhiDahi
+0      /CC
+7      /Disha
+15841  /Hadoop_File
+7      /Hadoop_File1
+7      /Sakshi
+13     /Tejashree
+6      /Tejashree1
+7      /ha
+33     /test
+
+10. df
+
+[hadoop@client36 Shreyas]$ hadoop fs -df
+Filesystem                              Size    Used    Available  Use%
+hdfs://client36.hadoop.lan:9000  53660876800  135168  32822435840    0%
+
+11. fsck
+
+[hadoop@client36 Shreyas]$ hadoop fsck /
+DEPRECATED: Use of this script to execute hdfs command is deprecated.
+Instead use the hdfs command for it.
+
+Connecting to namenode via http://client36.hadoop.lan:50070/fsck?ugi=hadoop&path=%2F
+FSCK started by hadoop (auth:SIMPLE) from /192.168.100.123 for path / at Thu Nov 24 16:02:34 IST 2022
+.
+/AbhiDahi/a1.txt:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741839_1015. Target Replicas is 3 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/AbhiDahi/a5.txt:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741838_1014. Target Replicas is 3 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/Disha/a1.txt:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741834_1010. Target Replicas is 3 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/Hadoop_File:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741831_1007. Target Replicas is 3 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/Hadoop_File1:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741828_1004. Target Replicas is 3 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/Sakshi/Tejashree/a1.txt:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741833_1009. Target Replicas is 3 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+...
+/Tejashree/a1.txt:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741835_1011. Target Replicas is 3 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/Tejashree/a5.txt:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741837_1013. Target Replicas is 3 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/Tejashree1/a5.txt:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741836_1012. Target Replicas is 3 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/ha:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741832_1008. Target Replicas is 3 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/test/a2.txt:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741841_1017. Target Replicas is 5 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/test/a3.txt:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741842_1018. Target Replicas is 5 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+.
+/test/hello.txt:  Under replicated BP-793620210-192.168.100.123-1668241837815:blk_1073741840_1016. Target Replicas is 5 but found 1 live replica(s), 0 decommissioned replica(s), 0 decommissioning replica(s).
+Status: HEALTHY
+ Total size:	15934 B
+ Total dirs:	18
+ Total files:	15
+ Total symlinks:		0
+ Total blocks (validated):	13 (avg. block size 1225 B)
+ Minimally replicated blocks:	13 (100.0 %)
+ Over-replicated blocks:	0 (0.0 %)
+ Under-replicated blocks:	13 (100.0 %)
+ Mis-replicated blocks:		0 (0.0 %)
+ Default replication factor:	3
+ Average block replication:	1.0
+ Corrupt blocks:		0
+ Missing replicas:		32 (71.111115 %)
+ Number of data-nodes:		1
+ Number of racks:		1
+FSCK ended at Thu Nov 24 16:02:34 IST 2022 in 14 milliseconds
+
+
+The filesystem under path '/' is HEALTHY
+

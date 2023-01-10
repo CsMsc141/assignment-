@@ -1,0 +1,157 @@
+[hadoop@client29 Assignment2]$ cd $HADOOP_HOME/sbin
+
+[hadoop@client29 Assignment2]$ ./start-all.sh
+
+1. touchz
+
+[hadoop@client29 Assignment2]$ hadoop fs -touchz /test/test.txt
+
+[hadoop@client29 Assignment2]$ hadoop fs -ls /test
+Found 1 items
+-rw-r--r--   3 hadoop supergroup          0 2022-12-01 12:33 /test/test.txt
+
+2. test
+
+[hadoop@client29 Assignment2]$ hadoop fs -help test
+-test -[defsz] <path> :
+  Answer various questions about <path>, with result via exit status.
+    -d  return 0 if <path> is a directory.
+    -e  return 0 if <path> exists.
+    -f  return 0 if <path> is a file.
+    -s  return 0 if file <path> is greater         than zero bytes in size.
+    -w  return 0 if file <path> exists         and write permission is granted.
+    -r  return 0 if file <path> exists         and read permission is granted.
+    -z  return 0 if file <path> is         zero bytes in size, else return 1.
+
+[hadoop@client29 Assignment2]$ hadoop fs -test -e /test/test.txt
+[hadoop@client29 Assignment2]$ echo $?
+0
+[hadoop@client29 Assignment2]$ hadoop fs -test -e /test/test.sdf
+[hadoop@client29 Assignment2]$ echo $?
+1
+
+3. text
+
+[hadoop@client25 ~]$ hadoop fs -text /test/test.txt
+Test file.
+This a second line.
+
+4. stat
+
+[hadoop@client25 ~]$ hadoop fs -stat /test/test.txt
+2022-12-01 08:01:49
+
+5. usage
+
+[hadoop@client25 ~]$ hadoop fs -usage ls
+Usage: hadoop fs [generic options] -ls [-C] [-d] [-h] [-q] [-R] [-t] [-S] [-r] [-u] [<path> ...]
+
+6. help
+
+[hadoop@client25 ~]$ hadoop fs -help usage
+-usage [cmd ...] :
+  Displays the usage for given command or all commands if none is specified.
+
+7. chmod
+
+[hadoop@client25 ~]$ hadoop fs -ls /test/
+Found 1 items
+-rw-r--r--   3 hadoop supergroup         31 2022-12-01 13:31 /test/test.txt
+
+[hadoop@client25 ~]$ hadoop fs -chmod 0777 /test/test.txt
+
+[hadoop@client25 ~]$ hadoop fs -ls /test/
+Found 1 items
+-rwxrwxrwx   3 hadoop supergroup         31 2022-12-01 13:31 /test/test.txt
+
+8. appendToFile
+
+[hadoop@client25 ~]$ hadoop fs -appendToFile data.txt /test/test.txt
+
+22/12/01 13:47:10 WARN hdfs.DataStreamer: DataStreamer Exception
+java.io.IOException: Failed to replace a bad datanode on the existing pipeline due to no more good datanodes being available to try. (Nodes: current=[DatanodeInfoWithStorage[192.168.100.207:50010,DS-542cd333-767d-4bd7-b152-ea31807a3d17,DISK]], original=[DatanodeInfoWithStorage[192.168.100.207:50010,DS-542cd333-767d-4bd7-b152-ea31807a3d17,DISK]]). The current failed datanode replacement policy is DEFAULT, and a client may configure this via 'dfs.client.block.write.replace-datanode-on-failure.policy' in its configuration.
+	at org.apache.hadoop.hdfs.DataStreamer.findNewDatanode(DataStreamer.java:1288)
+	at org.apache.hadoop.hdfs.DataStreamer.addDatanode2ExistingPipeline(DataStreamer.java:1360)
+	at org.apache.hadoop.hdfs.DataStreamer.handleDatanodeReplacement(DataStreamer.java:1575)
+	at org.apache.hadoop.hdfs.DataStreamer.setupPipelineForAppendOrRecovery(DataStreamer.java:1476)
+	at org.apache.hadoop.hdfs.DataStreamer.run(DataStreamer.java:714)
+appendToFile: Failed to replace a bad datanode on the existing pipeline due to no more good datanodes being available to try. (Nodes: current=[DatanodeInfoWithStorage[192.168.100.207:50010,DS-542cd333-767d-4bd7-b152-ea31807a3d17,DISK]], original=[DatanodeInfoWithStorage[192.168.100.207:50010,DS-542cd333-767d-4bd7-b152-ea31807a3d17,DISK]]). The current failed datanode replacement policy is DEFAULT, and a client may configure this via 'dfs.client.block.write.replace-datanode-on-failure.policy' in its configuration.
+
+9. checksum
+
+[hadoop@client25 ~]$ hadoop fs -checksum /test/test.txt
+/test/test.txt	MD5-of-0MD5-of-512CRC32C	00000200000000000000000056dcbdcc8aefb04f02fdd936dc4d823b
+
+10. count
+
+[hadoop@client25 ~]$ hadoop fs -count /
+          25           28              12214 /
+
+11. find
+
+[hadoop@client25 ~]$ hadoop fs -find / test
+/
+/AA
+/AA/AA
+/AA/AA/a1.tx
+/Abhi
+/Abhi/a2.txt
+/Abhishek1
+/Abhishek2
+/Abhishek2/a1.txt
+/Abhishek2/a2.txt
+/Aish
+/Aish/abc.txt
+/Aishwarya
+/Aishwarya1
+/Aishwarya1/abc.txt
+/Aishwarya1/moveTo
+/Aishwarya1/moveTo/moved.txt
+/Aishwarya1/xyz.txt
+/F1
+/Hadoop_File
+/Sakshi
+/Sakshi1
+/Sakshi1/a2.txt
+/elevennov
+/elevennov/data1.txt
+/elevennov/demo.txt
+/f1
+/f2
+/f2/a2.txt
+/f3
+/f3/a1.txt
+/f3/a2.txt
+/msc
+/pj
+/pj2
+/pj2/moveTo
+/pj2/moveTo/moved.txt
+/pj2/moveTo/moved_cp.txt
+/pj2/welcome1.txt
+/prasad
+/prasad20
+/prasadj
+/sk
+/sk2
+/sonu
+/sonu/data.txt
+/sonu/hello1.txt
+/sonu/moveTo
+/sonu/moveTo/data.txt
+/sonu/moveTo/moved.txt
+/sonu/moveTo/moved_cp.txt
+/test
+/test/test.txt
+find: `test': No such file or directory
+
+12. getmerge
+
+[hadoop@client25 ~]$ hadoop fs -getmerge /test hello.txt
+[hadoop@client25 ~]$ cat hello.txt 
+Get rekt!
+Hello
+World
+
+Have a nice day!
+
